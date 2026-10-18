@@ -106,25 +106,36 @@ class _ProductListScreenState extends State<ProductListScreen> {
     return Scaffold(
       backgroundColor: colors.surfaceContainerLowest,
       appBar: AppBar(
+        titleSpacing: 12,
         title: const Text(
           'Canasta colombiana',
-          style: TextStyle(fontWeight: FontWeight.bold),
+          style: TextStyle(
+            fontSize: 17,
+            fontWeight: FontWeight.bold,
+          ),
         ),
         actions: [
           Padding(
-            padding: const EdgeInsets.only(right: 8),
+            padding: const EdgeInsets.only(right: 6),
             child: TextButton.icon(
+              style: TextButton.styleFrom(
+                visualDensity: VisualDensity.compact,
+                padding: const EdgeInsets.symmetric(horizontal: 8),
+              ),
               onPressed: _isSyncing ? null : _syncPendingNotes,
               icon: _isSyncing
                   ? const SizedBox(
-                      width: 16,
-                      height: 16,
+                      width: 14,
+                      height: 14,
                       child: CircularProgressIndicator(strokeWidth: 2),
                     )
-                  : const Icon(Icons.sync, size: 20),
+                  : const Icon(Icons.sync, size: 18),
               label: const Text(
                 'Sincronizar pendientes',
-                style: TextStyle(fontWeight: FontWeight.w600),
+                style: TextStyle(
+                  fontSize: 12,
+                  fontWeight: FontWeight.w600,
+                ),
               ),
             ),
           ),
