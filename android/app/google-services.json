@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "922417881195",
+    "project_id": "canasta-colombiana",
+    "storage_bucket": "canasta-colombiana.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:922417881195:android:8cee29e5596f51f905d12e",
+        "android_client_info": {
+          "package_name": "com.santiago.taller_movil"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC9TrSCn6Z-FjVY8RThaftWMp_09ApGtLc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

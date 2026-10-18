@@ -1,0 +1,142 @@
+[
+  {
+    "id": 1,
+    "name": "Café de Huila Especial 500 g",
+    "category": "Café",
+    "price": 38000,
+    "image": "https://picsum.photos/seed/cafe-huila-500g/600/600"
+  },
+  {
+    "id": 2,
+    "name": "Café de Nariño Excelso 500 g",
+    "category": "Café",
+    "price": 42000,
+    "image": "https://picsum.photos/seed/cafe-narino-500g/600/600"
+  },
+  {
+    "id": 3,
+    "name": "Café Quindío Gourmet Molido 250 g",
+    "category": "Café",
+    "price": 26000,
+    "image": "https://picsum.photos/seed/cafe-quindio-250g/600/600"
+  },
+  {
+    "id": 4,
+    "name": "Café Sierra Nevada Orgánico 500 g",
+    "category": "Café",
+    "price": 45000,
+    "image": "https://picsum.photos/seed/cafe-sierra-nevada-500g/600/600"
+  },
+  {
+    "id": 5,
+    "name": "Bocadillo veleño tradicional (lonja)",
+    "category": "Dulces",
+    "price": 12000,
+    "image": "https://picsum.photos/seed/bocadillo-veleno-lonja/600/600"
+  },
+  {
+    "id": 6,
+    "name": "Arequipe del Valle 250 g",
+    "category": "Dulces",
+    "price": 14000,
+    "image": "https://picsum.photos/seed/arequipe-valle-250g/600/600"
+  },
+  {
+    "id": 7,
+    "name": "Manjar blanco tradicional 250 g",
+    "category": "Dulces",
+    "price": 16000,
+    "image": "https://picsum.photos/seed/manjar-blanco-valle-250g/600/600"
+  },
+  {
+    "id": 8,
+    "name": "Panelitas de leche de Boyacá x12",
+    "category": "Dulces",
+    "price": 18000,
+    "image": "https://picsum.photos/seed/panelitas-leche-boyaca/600/600"
+  },
+  {
+    "id": 9,
+    "name": "Aguardiente antioqueño tapa azul 750 ml",
+    "category": "Bebidas",
+    "price": 52000,
+    "image": "https://picsum.photos/seed/aguardiente-antioqueno-750ml/600/600"
+  },
+  {
+    "id": 10,
+    "name": "Ron Viejo de Caldas 3 años 750 ml",
+    "category": "Bebidas",
+    "price": 58000,
+    "image": "https://picsum.photos/seed/ron-viejo-caldas-750ml/600/600"
+  },
+  {
+    "id": 11,
+    "name": "Lulada valluna embotellada 500 ml",
+    "category": "Bebidas",
+    "price": 9500,
+    "image": "https://picsum.photos/seed/lulada-valluna-500ml/600/600"
+  },
+  {
+    "id": 12,
+    "name": "Sabajón de Apolo tradicional 750 ml",
+    "category": "Bebidas",
+    "price": 34000,
+    "image": "https://picsum.photos/seed/sabajon-apolo-750ml/600/600"
+  },
+  {
+    "id": 13,
+    "name": "Panela orgánica pulverizada 500 g",
+    "category": "Despensa",
+    "price": 8500,
+    "image": "https://picsum.photos/seed/panela-organica-500g/600/600"
+  },
+  {
+    "id": 14,
+    "name": "Chocolate santafereño con clavos y canela 500 g",
+    "category": "Despensa",
+    "price": 15000,
+    "image": "https://picsum.photos/seed/chocolate-santafereno-500g/600/600"
+  },
+  {
+    "id": 15,
+    "name": "Ají pique de Cartagena 200 ml",
+    "category": "Despensa",
+    "price": 11000,
+    "image": "https://picsum.photos/seed/aji-cartagena-200ml/600/600"
+  },
+  {
+    "id": 16,
+    "name": "Chicharrón tostadito paisa 150 g",
+    "category": "Despensa",
+    "price": 13500,
+    "image": "https://picsum.photos/seed/chicharron-paisa-150g/600/600"
+  },
+  {
+    "id": 17,
+    "name": "Mochila arhuaca de lana tradicional",
+    "category": "Artesanías",
+    "price": 145000,
+    "image": "https://picsum.photos/seed/mochila-arhuaca-lana/600/600"
+  },
+  {
+    "id": 18,
+    "name": "Sombrero vueltiao 21 vueltas",
+    "category": "Artesanías",
+    "price": 180000,
+    "image": "https://picsum.photos/seed/sombrero-vueltiao-21/600/600"
+  },
+  {
+    "id": 19,
+    "name": "Chiva artesanal de barro de Pitalito",
+    "category": "Artesanías",
+    "price": 48000,
+    "image": "https://picsum.photos/seed/chiva-artesanal-pitalito/600/600"
+  },
+  {
+    "id": 20,
+    "name": "Ruana boyacense de lana virgen",
+    "category": "Artesanías",
+    "price": 165000,
+    "image": "https://picsum.photos/seed/ruana-boyacense-lana/600/600"
+  }
+]
