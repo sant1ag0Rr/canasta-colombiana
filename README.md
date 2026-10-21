@@ -9,10 +9,10 @@ Aplicación móvil desarrollada en Flutter para la plataforma Android. Consiste 
 ---
 
 ## Requisitos
-- Flutter SDK (versión 3.24 o superior recomendada, probado en Flutter 3.47.3 / Dart 3.13.3)
+- Flutter SDK con Dart 3.11 o superior (probado con Dart 3.12.2 y Dart 3.13.3)
 - Android Studio / Android SDK configurado
-- Firebase CLI y FlutterFire CLI (`dart pub global activate flutterfire_cli`)
 - Dispositivo Android físico o emulador con Google Play Services
+- Firebase CLI y FlutterFire CLI solo si se quiere enlazar otro proyecto de Firebase (no es necesario para ejecutar)
 
 ---
 
@@ -29,12 +29,17 @@ taller_movil/
 │   ├── config/
 │   │   └── api_config.dart         # Definición de la URL pública del catálogo (kProductsUrl)
 │   ├── database/
-│   │   ├── app_database.dart       # Definición de tabla Drift y métodos de persistencia local
+│   │   ├── app_database.dart       # Definición de la tabla ProductNotes y la base SQLite
 │   │   └── app_database.g.dart     # Código generado por build_runner para Drift
+│   ├── local/
+│   │   └── product_note_local_data_source.dart  # Consultas de Drift (leer, guardar, pendientes, marcar sincronizado)
 │   ├── models/
-│   │   └── product.dart            # Modelo de datos del producto con serialización JSON
+│   │   ├── product.dart            # Modelo de datos del producto con serialización JSON
+│   │   └── product_note.dart       # Modelo de la nota personal usado por la interfaz
+│   ├── remote/
+│   │   └── product_note_remote_data_source.dart # Escritura en Firestore (product_notes/{productId})
 │   ├── repositories/
-│   │   └── product_repository.dart # Patrón Repository con lógica offline-first y sync
+│   │   └── product_repository.dart # Patrón Repository: coordina Drift y Firestore (offline-first y sync)
 │   ├── screens/
 │   │   ├── product_detail_screen.dart # Pantalla de detalle, selector de prioridad y notas
 │   │   └── product_list_screen.dart   # Pantalla principal con catálogo y botón de sync
@@ -45,6 +50,7 @@ taller_movil/
 │   ├── firebase_options.dart       # Opciones de inicialización generadas por FlutterFire
 │   └── main.dart                   # Punto de entrada de la aplicación e inyección de dependencias
 ├── test/
+│   ├── product_repository_test.dart # Pruebas de Drift y del Repository con base en memoria
 │   └── widget_test.dart            # Pruebas unitarias de modelos y utilidades
 ├── pubspec.yaml                    # Dependencias y configuración de Flutter
 └── README.md                       # Documentación del proyecto
@@ -64,22 +70,35 @@ taller_movil/
    dart run build_runner build --delete-conflicting-outputs
    ```
 
-3. **Configuración de Firebase:**
-   Si no se ha enlazado el proyecto de Firebase:
-   ```bash
-   flutterfire configure
-   ```
-   Esto generará el archivo `lib/firebase_options.dart` y enlazará `android/app/google-services.json`.
-
-4. **Publicar catálogo y configurar URL:**
-   - Publica el archivo `api/productos.json` en un repositorio público de GitHub o Gist.
-   - Copia la URL Raw del archivo.
-   - Actualiza la constante `kProductsUrl` en `lib/config/api_config.dart`.
-
-5. **Ejecutar la aplicación en Android:**
+3. **Ejecutar la aplicación en Android:**
    ```bash
    flutter run
    ```
+
+4. **Ejecutar las pruebas (opcional):**
+   ```bash
+   flutter test
+   ```
+
+### Firebase
+El proyecto ya incluye `lib/firebase_options.dart` y `android/app/google-services.json` enlazados al proyecto `canasta-colombiana`, así que no hace falta ejecutar `flutterfire configure`. La base de Firestore debe estar en modo de prueba (Test mode) para permitir la escritura. Las notas se guardan en la colección `product_notes`, usando el `productId` como ID del documento.
+
+Si se quiere usar otro proyecto de Firebase:
+```bash
+dart pub global run flutterfire_cli:flutterfire configure --project=<PROJECT_ID> --platforms=android
+```
+
+### Catálogo
+El catálogo se lee desde `api/productos.json` publicado en este repositorio. La URL está en la constante `kProductsUrl` de `lib/config/api_config.dart`.
+
+---
+
+## Cómo probar el modo offline
+1. Abre un producto, elige una prioridad de 2 o más, escribe una nota y guarda. Con internet aparece **Sincronizado**.
+2. Activa el modo avión, edita la nota y guarda. La nota se conserva y aparece **Pendiente**.
+3. Cierra y vuelve a abrir la app: la nota y su estado siguen ahí porque vienen de Drift.
+4. Desactiva el modo avión y pulsa **Sincronizar pendientes**. Al abrir de nuevo el producto aparece **Sincronizado**.
+5. Si eliges prioridad 1, la app muestra un mensaje y no guarda nada.
 
 ---
 
