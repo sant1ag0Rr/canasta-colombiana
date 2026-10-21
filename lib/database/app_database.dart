@@ -7,6 +7,7 @@ import 'package:path_provider/path_provider.dart';
 
 part 'app_database.g.dart';
 
+@DataClassName('ProductNoteRow')
 class ProductNotes extends Table {
   IntColumn get productId => integer()();
   TextColumn get note => text()();
@@ -31,28 +32,5 @@ class AppDatabase extends _$AppDatabase {
       final file = File(p.join(dbFolder.path, 'app_database.sqlite'));
       return NativeDatabase.createInBackground(file);
     });
-  }
-
-  // 1. Obtener nota por productId
-  Future<ProductNote?> getNoteByProductId(int productId) {
-    return (select(productNotes)..where((tbl) => tbl.productId.equals(productId)))
-        .getSingleOrNull();
-  }
-
-  // 2. Upsert: guarda o actualiza el existente sin duplicar registros
-  Future<int> upsertNote(ProductNotesCompanion companion) {
-    return into(productNotes).insertOnConflictUpdate(companion);
-  }
-
-  // 3. Obtener todas las que tengan pendingSync == true
-  Future<List<ProductNote>> getPendingNotes() {
-    return (select(productNotes)..where((tbl) => tbl.pendingSync.equals(true)))
-        .get();
-  }
-
-  // 4. Marcar como sincronizada (pendingSync = false) por productId
-  Future<int> markAsSynced(int productId) {
-    return (update(productNotes)..where((tbl) => tbl.productId.equals(productId)))
-        .write(const ProductNotesCompanion(pendingSync: Value(false)));
   }
 }

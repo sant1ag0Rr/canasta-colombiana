@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-import '../database/app_database.dart';
 import '../models/product.dart';
+import '../models/product_note.dart';
 import '../repositories/product_repository.dart';
 import '../widgets/product_card.dart';
 

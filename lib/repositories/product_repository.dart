@@ -1,9 +1,9 @@
 import 'dart:async';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:drift/drift.dart';
 
-import '../database/app_database.dart';
+import '../local/product_note_local_data_source.dart';
 import '../models/product.dart';
+import '../models/product_note.dart';
+import '../remote/product_note_remote_data_source.dart';
 import '../services/product_service.dart';
 
 class InvalidPriorityException implements Exception {
@@ -36,13 +36,13 @@ class SaveNoteResult {
 
 class ProductRepository {
   final ProductService productService;
-  final AppDatabase database;
-  final FirebaseFirestore? firestore;
+  final ProductNoteLocalDataSource local;
+  final ProductNoteRemoteDataSource? remote;
 
   ProductRepository({
     required this.productService,
-    required this.database,
-    this.firestore,
+    required this.local,
+    this.remote,
   });
 
   // 1. Obtener catálogo desde el servicio HTTP
@@ -52,7 +52,7 @@ class ProductRepository {
 
   // 2. Obtener nota guardada localmente desde Drift
   Future<ProductNote?> getNote(int productId) {
-    return database.getNoteByProductId(productId);
+    return local.getNote(productId);
   }
 
   // 3. Guardar nota con estrategia offline-first
@@ -64,50 +64,20 @@ class ProductRepository {
       );
     }
 
-    final now = DateTime.now();
-
-    // (b) Guarda primero en Drift con pendingSync = true y updatedAt = ahora
-    await database.upsertNote(
-      ProductNotesCompanion(
-        productId: Value(productId),
-        note: Value(note),
-        priority: Value(priority),
-        updatedAt: Value(now),
-        pendingSync: const Value(true),
-      ),
+    final newNote = ProductNote(
+      productId: productId,
+      note: note,
+      priority: priority,
+      updatedAt: DateTime.now(),
     );
 
-    bool synced = false;
-    final currentFirestore = firestore;
+    // (b) Guarda primero en Drift con pendingSync = true y updatedAt = ahora
+    await local.saveNote(newNote);
 
-    // (c) Intenta enviar a Firestore
-    if (currentFirestore != null) {
-      try {
-        await currentFirestore
-            .collection('product_notes')
-            .doc(productId.toString())
-            .set(
-              {
-                'productId': productId,
-                'note': note,
-                'priority': priority,
-                'updatedAt': Timestamp.fromDate(now),
-              },
-              SetOptions(merge: true),
-            )
-            .timeout(const Duration(seconds: 8));
+    // (c) Intenta enviar a Firestore; si falla, el registro sigue pendiente
+    final synced = await _trySync(newNote);
 
-        // (d) Si el envío termina bien, actualiza el registro local a pendingSync = false
-        await database.markAsSynced(productId);
-        synced = true;
-      } catch (_) {
-        // (e) Si Firebase falla o entra en timeout, conserva el registro local
-        // con pendingSync = true y NO lanza error al usuario.
-        synced = false;
-      }
-    }
-
-    final saved = await database.getNoteByProductId(productId);
+    final saved = await local.getNote(productId);
     return SaveNoteResult(
       note: saved!,
       synced: synced,
@@ -117,39 +87,15 @@ class ProductRepository {
   // 4. Sincronizar registros pendientes
   Future<SyncResult> syncPending() async {
     // Lee SOLO los registros con pendingSync == true
-    final pendingNotes = await database.getPendingNotes();
-
-    if (pendingNotes.isEmpty) {
-      return const SyncResult(syncedCount: 0, pendingCount: 0);
-    }
-
-    final currentFirestore = firestore;
-    if (currentFirestore == null) {
-      return SyncResult(syncedCount: 0, pendingCount: pendingNotes.length);
-    }
+    final pendingNotes = await local.getPendingNotes();
 
     int syncedCount = 0;
     int stillPendingCount = 0;
 
     for (final note in pendingNotes) {
-      try {
-        await currentFirestore
-            .collection('product_notes')
-            .doc(note.productId.toString())
-            .set(
-              {
-                'productId': note.productId,
-                'note': note.note,
-                'priority': note.priority,
-                'updatedAt': Timestamp.fromDate(note.updatedAt),
-              },
-              SetOptions(merge: true),
-            )
-            .timeout(const Duration(seconds: 8));
-
-        await database.markAsSynced(note.productId);
+      if (await _trySync(note)) {
         syncedCount++;
-      } catch (_) {
+      } else {
         stillPendingCount++;
       }
     }
@@ -158,5 +104,21 @@ class ProductRepository {
       syncedCount: syncedCount,
       pendingCount: stillPendingCount,
     );
+  }
+
+  // Envía una nota a Firestore y, solo si termina bien, la marca como sincronizada.
+  // Si Firebase falla o entra en timeout, conserva el registro local con
+  // pendingSync = true y NO lanza error al usuario.
+  Future<bool> _trySync(ProductNote note) async {
+    final remoteSource = remote;
+    if (remoteSource == null) return false;
+
+    try {
+      await remoteSource.upsertNote(note);
+      await local.markSynced(note.productId);
+      return true;
+    } catch (_) {
+      return false;
+    }
   }
 }

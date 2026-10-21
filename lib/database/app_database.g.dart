@@ -4,7 +4,7 @@ part of 'app_database.dart';
 
 // ignore_for_file: type=lint
 class $ProductNotesTable extends ProductNotes
-    with TableInfo<$ProductNotesTable, ProductNote> {
+    with TableInfo<$ProductNotesTable, ProductNoteRow> {
   @override
   final GeneratedDatabase attachedDatabase;
   final String? _alias;
@@ -81,7 +81,7 @@ class $ProductNotesTable extends ProductNotes
   static const String $name = 'product_notes';
   @override
   VerificationContext validateIntegrity(
-    Insertable<ProductNote> instance, {
+    Insertable<ProductNoteRow> instance, {
     bool isInserting = false,
   }) {
     final context = VerificationContext();
@@ -131,9 +131,9 @@ class $ProductNotesTable extends ProductNotes
   @override
   Set<GeneratedColumn> get $primaryKey => {productId};
   @override
-  ProductNote map(Map<String, dynamic> data, {String? tablePrefix}) {
+  ProductNoteRow map(Map<String, dynamic> data, {String? tablePrefix}) {
     final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
-    return ProductNote(
+    return ProductNoteRow(
       productId: attachedDatabase.typeMapping.read(
         DriftSqlType.int,
         data['${effectivePrefix}product_id'],
@@ -163,13 +163,13 @@ class $ProductNotesTable extends ProductNotes
   }
 }
 
-class ProductNote extends DataClass implements Insertable<ProductNote> {
+class ProductNoteRow extends DataClass implements Insertable<ProductNoteRow> {
   final int productId;
   final String note;
   final int priority;
   final DateTime updatedAt;
   final bool pendingSync;
-  const ProductNote({
+  const ProductNoteRow({
     required this.productId,
     required this.note,
     required this.priority,
@@ -197,12 +197,12 @@ class ProductNote extends DataClass implements Insertable<ProductNote> {
     );
   }
 
-  factory ProductNote.fromJson(
+  factory ProductNoteRow.fromJson(
     Map<String, dynamic> json, {
     ValueSerializer? serializer,
   }) {
     serializer ??= driftRuntimeOptions.defaultSerializer;
-    return ProductNote(
+    return ProductNoteRow(
       productId: serializer.fromJson<int>(json['productId']),
       note: serializer.fromJson<String>(json['note']),
       priority: serializer.fromJson<int>(json['priority']),
@@ -222,21 +222,21 @@ class ProductNote extends DataClass implements Insertable<ProductNote> {
     };
   }
 
-  ProductNote copyWith({
+  ProductNoteRow copyWith({
     int? productId,
     String? note,
     int? priority,
     DateTime? updatedAt,
     bool? pendingSync,
-  }) => ProductNote(
+  }) => ProductNoteRow(
     productId: productId ?? this.productId,
     note: note ?? this.note,
     priority: priority ?? this.priority,
     updatedAt: updatedAt ?? this.updatedAt,
     pendingSync: pendingSync ?? this.pendingSync,
   );
-  ProductNote copyWithCompanion(ProductNotesCompanion data) {
-    return ProductNote(
+  ProductNoteRow copyWithCompanion(ProductNotesCompanion data) {
+    return ProductNoteRow(
       productId: data.productId.present ? data.productId.value : this.productId,
       note: data.note.present ? data.note.value : this.note,
       priority: data.priority.present ? data.priority.value : this.priority,
@@ -249,7 +249,7 @@ class ProductNote extends DataClass implements Insertable<ProductNote> {
 
   @override
   String toString() {
-    return (StringBuffer('ProductNote(')
+    return (StringBuffer('ProductNoteRow(')
           ..write('productId: $productId, ')
           ..write('note: $note, ')
           ..write('priority: $priority, ')
@@ -265,7 +265,7 @@ class ProductNote extends DataClass implements Insertable<ProductNote> {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      (other is ProductNote &&
+      (other is ProductNoteRow &&
           other.productId == this.productId &&
           other.note == this.note &&
           other.priority == this.priority &&
@@ -273,7 +273,7 @@ class ProductNote extends DataClass implements Insertable<ProductNote> {
           other.pendingSync == this.pendingSync);
 }
 
-class ProductNotesCompanion extends UpdateCompanion<ProductNote> {
+class ProductNotesCompanion extends UpdateCompanion<ProductNoteRow> {
   final Value<int> productId;
   final Value<String> note;
   final Value<int> priority;
@@ -295,7 +295,7 @@ class ProductNotesCompanion extends UpdateCompanion<ProductNote> {
   }) : note = Value(note),
        priority = Value(priority),
        updatedAt = Value(updatedAt);
-  static Insertable<ProductNote> custom({
+  static Insertable<ProductNoteRow> custom({
     Expression<int>? productId,
     Expression<String>? note,
     Expression<int>? priority,
@@ -491,17 +491,17 @@ class $$ProductNotesTableTableManager
         RootTableManager<
           _$AppDatabase,
           $ProductNotesTable,
-          ProductNote,
+          ProductNoteRow,
           $$ProductNotesTableFilterComposer,
           $$ProductNotesTableOrderingComposer,
           $$ProductNotesTableAnnotationComposer,
           $$ProductNotesTableCreateCompanionBuilder,
           $$ProductNotesTableUpdateCompanionBuilder,
           (
-            ProductNote,
-            BaseReferences<_$AppDatabase, $ProductNotesTable, ProductNote>,
+            ProductNoteRow,
+            BaseReferences<_$AppDatabase, $ProductNotesTable, ProductNoteRow>,
           ),
-          ProductNote,
+          ProductNoteRow,
           PrefetchHooks Function()
         > {
   $$ProductNotesTableTableManager(_$AppDatabase db, $ProductNotesTable table)
@@ -546,11 +546,11 @@ class $$ProductNotesTableTableManager
           withReferenceMapper: (p0) => p0
               .map(
                 (e) => (
-                  e.readTable<$ProductNotesTable, ProductNote>(table),
+                  e.readTable<$ProductNotesTable, ProductNoteRow>(table),
                   BaseReferences<
                     _$AppDatabase,
                     $ProductNotesTable,
-                    ProductNote
+                    ProductNoteRow
                   >(db, table, e),
                 ),
               )
@@ -564,17 +564,17 @@ typedef $$ProductNotesTableProcessedTableManager =
     ProcessedTableManager<
       _$AppDatabase,
       $ProductNotesTable,
-      ProductNote,
+      ProductNoteRow,
       $$ProductNotesTableFilterComposer,
       $$ProductNotesTableOrderingComposer,
       $$ProductNotesTableAnnotationComposer,
       $$ProductNotesTableCreateCompanionBuilder,
       $$ProductNotesTableUpdateCompanionBuilder,
       (
-        ProductNote,
-        BaseReferences<_$AppDatabase, $ProductNotesTable, ProductNote>,
+        ProductNoteRow,
+        BaseReferences<_$AppDatabase, $ProductNotesTable, ProductNoteRow>,
       ),
-      ProductNote,
+      ProductNoteRow,
       PrefetchHooks Function()
     >;
 
