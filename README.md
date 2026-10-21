@@ -86,13 +86,13 @@ taller_movil/
 ## Preguntas
 
 ### 1) ¿Para qué sirve pendingSync?
-Escribe aquí tu respuesta
+Es una marca en cada registro de Drift que indica si la nota ya llegó a Firestore. Con true está guardada solo en el celular y falta enviarla, y con false ya está sincronizada. Así la app sabe qué mostrar (Pendiente o Sincronizado) y qué registros reintentar al pulsar Sincronizar pendientes.
 
 ### 2) ¿Por qué se guarda primero en Drift?
-Escribe aquí tu respuesta
+Porque la base local siempre está disponible, aunque no haya internet o Firebase falle, y así el usuario nunca pierde lo que escribió. Primero se asegura el dato en el dispositivo y después se intenta enviarlo a la nube. Eso es el enfoque offline-first.
 
 ### 3) ¿Qué función cumple el Repository?
-Escribe aquí tu respuesta
+Es la capa intermedia entre la interfaz y las fuentes de datos (la API HTTP, Drift y Firestore). Centraliza la consulta local, el guardado y la sincronización, de modo que las pantallas solo le piden datos al Repository y no coordinan Drift ni Firebase directamente. Esto ordena el código y facilita cambiar una fuente sin tocar la interfaz.
 
 ### 4) ¿Qué ocurre si Firebase falla?
-Escribe aquí tu respuesta
+La nota sigue guardada en Drift con pendingSync = true, y la app no muestra un error ni deja de funcionar. En el detalle aparece como “Pendiente”. Cuando vuelve la conexión, el usuario pulsa “Sincronizar pendientes”, se envía a Firestore y el registro pasa a pendingSync = false. Como el documento usa el productId como ID, reenviarlo no crea duplicados.
