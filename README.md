@@ -3,8 +3,8 @@
 Aplicación móvil desarrollada en Flutter para la plataforma Android. Consiste en un catálogo de productos típicos colombianos donde los usuarios pueden calificar con una prioridad (1 a 5) y registrar notas personales para cada producto, implementando persistencia local offline-first con Drift, el patrón Repository y sincronización en la nube con Cloud Firestore.
 
 ## Integrantes
-- Estudiante 1: [Nombre y Apellido]
-- Estudiante 2: [Nombre y Apellido]
+- David Santiago Rodriguez Ruiz
+- David Velez
 
 ---
 
